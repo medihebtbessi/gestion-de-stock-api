@@ -25,7 +25,7 @@ public class CategoryDto {
     public static CategoryDto fromEntity(Category category) {
         if (category == null) {
             return null;
-            // TODO throw an exception
+
         }
 
         return CategoryDto.builder()
@@ -39,7 +39,7 @@ public class CategoryDto {
     public static Category toEntity(CategoryDto categoryDto) {
         if (categoryDto == null) {
             return null;
-            // TODO throw an exception
+
         }
 
         Category category = new Category();
