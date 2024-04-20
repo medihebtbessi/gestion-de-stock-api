@@ -5,7 +5,6 @@ package com.Tbessi.gestiondestock.dto;
 import com.Tbessi.gestiondestock.model.Article;
 import lombok.Builder;
 import lombok.Data;
-
 import java.math.BigDecimal;
 
 @Builder

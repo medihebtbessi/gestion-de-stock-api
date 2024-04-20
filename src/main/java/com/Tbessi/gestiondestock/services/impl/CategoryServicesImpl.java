@@ -5,8 +5,10 @@ import com.Tbessi.gestiondestock.dto.CategoryDto;
 import com.Tbessi.gestiondestock.exception.EntityNotFoundException;
 import com.Tbessi.gestiondestock.exception.ErrorCodes;
 import com.Tbessi.gestiondestock.exception.InvalidEntityException;
+import com.Tbessi.gestiondestock.exception.InvalidOperationException;
 import com.Tbessi.gestiondestock.model.Article;
 import com.Tbessi.gestiondestock.model.Category;
+import com.Tbessi.gestiondestock.repository.ArticleRepository;
 import com.Tbessi.gestiondestock.repository.CategoryRepository;
 import com.Tbessi.gestiondestock.services.CategoryServices;
 import com.Tbessi.gestiondestock.validator.ArticleValidator;
@@ -25,9 +27,11 @@ import java.util.stream.Collectors;
 public class CategoryServicesImpl implements CategoryServices {
 
     private CategoryRepository categoryRepository;
+    private ArticleRepository articleRepository;
     @Autowired
-    public CategoryServicesImpl(CategoryRepository categoryRepository) {
+    public CategoryServicesImpl(CategoryRepository categoryRepository,ArticleRepository articleRepository) {
         this.categoryRepository = categoryRepository;
+        this.articleRepository=articleRepository;
     }
 
     @Override
@@ -48,9 +52,10 @@ public class CategoryServicesImpl implements CategoryServices {
             log.error("Category id is null");
             return null;
         }
-        Optional<Category> category=categoryRepository.findById(id);
-        return Optional.of(CategoryDto.fromEntity(category.get())).orElseThrow(()->new EntityNotFoundException("Aucunne category avec L'id = "+id+" n'ete trouve dans la base de donne",
-                ErrorCodes.CATEGORY_NOT_FOUND));
+        return categoryRepository.findById(id)
+                .map(CategoryDto::fromEntity).
+                    orElseThrow(()->new EntityNotFoundException("Aucunne category avec L'id = "+id+" n'ete trouve dans la base de donne",
+                    ErrorCodes.CATEGORY_NOT_FOUND));
     }
 
     @Override
@@ -59,8 +64,9 @@ public class CategoryServicesImpl implements CategoryServices {
             log.error("category code is null");
             return null;
         }
-        Optional<Category> category=categoryRepository.findCategoryByCode(code);
-        return Optional.of(CategoryDto.fromEntity(category.get())).orElseThrow(()->new EntityNotFoundException("Aucun category avec le code = "+code+" n'ete trouve dans la base de donne",
+       return categoryRepository.findCategoryByCode(code)
+               .map(CategoryDto::fromEntity)
+               .orElseThrow(()->new EntityNotFoundException("Aucun category avec le code = "+code+" n'ete trouve dans la base de donne",
                 ErrorCodes.CATEGORY_NOT_FOUND));
     }
 
@@ -77,6 +83,10 @@ public class CategoryServicesImpl implements CategoryServices {
         if (id==null){
             log.error("Category id is null");
             return;
+        }
+        List<Article> articles=articleRepository.findAllByCategoryId(id);
+        if (!articles.isEmpty()){
+            throw new InvalidOperationException("Impossible de supprimer ctte categorie cette categorie qui est deja utilise",ErrorCodes.CATEGORY_ALREADY_IN_USE);
         }
         categoryRepository.deleteById(id);
     }
