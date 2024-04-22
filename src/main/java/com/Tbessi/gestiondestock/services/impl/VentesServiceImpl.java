@@ -30,14 +30,14 @@ public class VentesServiceImpl implements VentesService {
     private ArticleRepository articleRepository;
     private VentesRepository ventesRepository;
     private LigneVenteRepository ligneVenteRepository;
-
+    @Autowired
     public VentesServiceImpl(ArticleRepository articleRepository, VentesRepository ventesRepository, LigneVenteRepository ligneVenteRepository) {
         this.articleRepository = articleRepository;
         this.ventesRepository = ventesRepository;
         this.ligneVenteRepository = ligneVenteRepository;
     }
 
-    @Autowired
+
 
     @Override
     public VentesDto save(VentesDto dto) {
@@ -65,6 +65,7 @@ public class VentesServiceImpl implements VentesService {
             LigneVente ligneVente= LigneVenteDto.toEntity(ligneVenteDto);
             ligneVente.setVente(savedVentes);
             ligneVenteRepository.save(ligneVente);
+
         });
         return VentesDto.fromEntity(savedVentes);
     }

@@ -1,12 +1,7 @@
 package com.Tbessi.gestiondestock.dto;
-
-import com.Tbessi.gestiondestock.model.LigneVente;
 import com.Tbessi.gestiondestock.model.Ventes;
-import jakarta.persistence.Column;
-import jakarta.persistence.OneToMany;
 import lombok.Builder;
 import lombok.Data;
-
 import java.time.Instant;
 import java.util.List;
 

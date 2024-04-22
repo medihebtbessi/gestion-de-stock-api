@@ -25,6 +25,13 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency-->
+		<!-- https://mvnrepository.com/artifact/com.github.fabienbarbero/flickr-api -->
+		<dependency>
+			<groupId>com.flickr4java</groupId>
+			<artifactId>flickr4java</artifactId>
+			<version>3.0.8</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
